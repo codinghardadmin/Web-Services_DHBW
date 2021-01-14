@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="favicon-32x32.png">
+
+    <title>KeepYourDay</title>
+  </head>
+  <body>
+    <div class="container">
+    
+      <br>
+    	<h1>KeepYourDay</h1>
+      <br>
+
+      <details>
+        <summary>Version</summary>
+        <br>
+        <button id="btnVersion" onclick="getVersion()" class="btn btn-primary mb-2">Button getVersion</button>
+        <p>Version:</p>
+        <p id="version"></p>
+      </details>
+      <hr>
+
+      <details>
+        <summary>News</summary>
+        <br>
+        <button id="btnNews" onclick="getNews()" class="btn btn-primary mb-2">Button getNews</button>
+        <p>News:</p>
+        <div id="news"></div>
+      </details>
+      <hr>
+
+      <details>
+        <summary>Weather</summary>
+        <br>
+        <button id="btnWeather" onclick="getWeather()" class="btn btn-primary mb-2">Button getWeather</button>
+        <p>Weather:</p>
+        <p id="weather"></p>
+      </details>
+      <hr>
+
+
+
+      <details>
+        <summary>Add DayInfo</summary>
+        <br>
+        <button id="btnAddDayInfo" onclick="addDayInfo()" class="btn btn-primary mb-2">Button addDayInfo</button>
+        <div class="form-group">
+          <label for="name" class="">User</label>
+          <input type="text" class="form-control" id="name" placeholder="username" name="name" value="name">
+        </div>
+        <div class="form-group">
+          <label for="date" class="">Date</label>
+          <input type="text" class="form-control" id="date" placeholder="2020-03-28" name="date" value="2020-03-28">
+        </div>
+        <div class="form-group">
+          <label for="happiness" class="">Happiness</label>
+          <input type="number" class="form-control" id="happiness" placeholder=5 name="happiness" value="5">
+        </div>
+      </details>
+      <hr>
+
+      <details>
+        <summary>Update DayInfo</summary>
+        <br>
+        <button id="btnPutDayInfo" onclick="putDayInfo()" class="btn btn-primary mb-2">Button putDayInfo</button>
+        <div class="form-group">
+          <label for="putname" class="">User</label>
+          <input type="text" class="form-control" id="putname" placeholder="username" name="putname" value="name">
+        </div>
+        <div class="form-group">
+          <label for="putdate" class="">Date</label>
+          <input type="text" class="form-control" id="putdate" placeholder="2020-03-28" name="putdate" value="2020-03-28">
+        </div>
+        <h4>Values you want to change:</h4>
+        <div class="form-group">
+          <label for="puthappiness" class="">Happiness</label>
+          <input type="number" class="form-control" id="puthappiness" placeholder=5 name="puthappiness" value="5">
+        </div>
+      </details>
+      <hr>
+
+      <details>
+        <summary>Delete DayInfo</summary>
+        <br>
+        <button id="btnDelDayInfo" onclick="delDayInfo()" class="btn btn-primary mb-2">Button delDayInfo</button>
+        <div class="form-group">
+          <label for="delname" class="">User</label>
+          <input type="text" class="form-control" id="delname" placeholder="username" name="delname" value="name">
+        </div>
+        <div class="form-group">
+          <label for="deldate" class="">Date</label>
+          <input type="text" class="form-control" id="deldate" placeholder="2020-03-28" name="deldate" value="2020-03-28">
+        </div>
+      </details>
+      <hr>
+
+      <details>
+        <summary>Show DayInfo</summary>
+        <br>
+        <button id="btnShowDayInfo" onclick="showDayInfo()" class="btn btn-primary mb-2">Button showDayInfo</button>
+        <div class="form-group">
+          <label for="showname" class="">User</label>
+          <input type="text" class="form-control" id="showname" placeholder="username" name="showname" value="name">
+        </div>
+        <div class="form-group">
+          <label for="showdate" class="">Date</label>
+          <input type="text" class="form-control" id="showdate" placeholder="2020-03-28" name="showdate" value="2020-03-28">
+        </div>
+        <div id="dayinfo"></div>
+      </details>
+      <hr>
+
+      <details>
+        <summary>Show LastDays</summary>
+        <br>
+        <button id="btnLastDays" onclick="getLastDays()" class="btn btn-primary mb-2">Button showLastDays</button>
+        <div class="form-group">
+          <label for="lastDaysName" class="">User</label>
+          <input type="text" class="form-control" id="lastDaysName" placeholder="username" name="lastDaysName" value="name">
+        </div>
+        <p id="lastdays1"></p>
+        <p id="lastdays2"></p>
+        <p id="lastdays3"></p>
+      </details>
+      <hr>
+    
+    </div>
+    
+    <script>
+
+function getVersion() {    
+	var request = new XMLHttpRequest();
+	request.open('GET', '/keepyourday/version', true);
+	request.onload = function() {
+		var data = this.response;
+		document.getElementById("version").innerHTML = data;
+	}
+	request.send();
+}
+
+function getNews(user) {    
+	var request = new XMLHttpRequest();
+	request.open('GET', '/keepyourday/news', true);
+	request.onload = function() {
+		var data = this.response;
+    listNews(JSON.parse(data), document.getElementById("news"));
+	}
+	request.send();
+}
+
+function getWeather(user) {    
+	var request = new XMLHttpRequest();
+	request.open('GET', '/keepyourday/weather', true);
+	request.onload = function() {
+    var data = this.response;
+    var obj = JSON.parse(data);
+		document.getElementById("weather").innerHTML = "Maximaltemperatur: " + obj.maxTemp + " °C | Minimaltemperatur: " + obj.minTemp + " °C";
+	}
+	request.send();
+}
+
+function addDayInfo() {    
+  let user = document.getElementById("name").value;
+  let date = document.getElementById("date").value;
+  let happiness = document.getElementById("happiness").value;
+
+  let payload = {
+    user: user,
+    date: date,
+    happiness: happiness
+  }
+
+	var request = new XMLHttpRequest();
+	request.open('POST', '/keepyourday/postdayinfo', true);
+	request.onload = function() {
+    var data = this.response;
+    alert("Antwort vom Server: \n" + data);
+  }
+  request.setRequestHeader("Content-type", "application/json");
+	request.send(JSON.stringify(payload));
+}
+
+function getLastDays() {   
+  let user = document.getElementById("lastDaysName").value;
+
+	var request = new XMLHttpRequest();
+	request.open('GET', '/keepyourday/getdayinfolist/' + user, true);
+	request.onload = function() {
+    var data = this.response;
+    var obj = JSON.parse(data);
+    
+    showADay(obj[0], document.getElementById("lastdays1"));
+    showADay(obj[1], document.getElementById("lastdays2"));
+    showADay(obj[2], document.getElementById("lastdays3"));
+	}
+	request.send();
+}
+
+function putDayInfo() {    
+  let user = document.getElementById("putname").value;
+  let date = document.getElementById("putdate").value;
+  let happiness = document.getElementById("puthappiness").value;
+
+  let payload = {
+    user: user,
+    date: date,
+    happiness: happiness
+  }
+
+	var request = new XMLHttpRequest();
+	request.open('PUT', '/keepyourday/putdayinfo', true);
+	request.onload = function() {
+    var data = this.response;
+    alert("Antwort vom Server: \n" + data);
+  }
+  request.setRequestHeader("Content-type", "application/json");
+	request.send(JSON.stringify(payload));
+}
+
+function delDayInfo(user) {    
+  let deluser = document.getElementById("delname").value;
+  let deldate = document.getElementById("deldate").value;
+
+	var request = new XMLHttpRequest();
+	request.open('DELETE', '/keepyourday/deletedayinfo/' + deluser + "/" + deldate, true);
+	request.onload = function() {
+    var data = this.response;
+    alert("Antwort vom Server: \n" + data);
+	}
+	request.send();
+}
+
+function showDayInfo(user) {    
+  let showuser = document.getElementById("showname").value;
+  let showdate = document.getElementById("showdate").value;
+
+	var request = new XMLHttpRequest();
+	request.open('GET', '/keepyourday/getdayinfo/' + showuser + "/" + showdate, true);
+	request.onload = function() {
+    var data = this.response;
+    let obj = JSON.parse(data);
+
+    let para = document.getElementById("dayinfo");
+
+    showADay(obj, para)
+	}
+	request.send();
+}
+
+function showADay(obj, para) {
+    let elemWeather = obj.weather;
+
+    let weatherstr = "Maximaltemperatur: " + obj.weather.maxTemp + " °C | Minimaltemperatur: " + obj.weather.minTemp + " °C";
+    let successstr = obj.success;
+    let happinessstr = "" + obj.happiness;
+    let datestr = obj.date;
+
+    let childDate = document.createElement("span");
+    childDate.innerHTML = "Date: " + datestr;
+
+    let childWeather = document.createElement("span");
+    childWeather.innerHTML = "Weather: " + weatherstr;
+
+    let childSuccess = document.createElement("span");
+    childSuccess.innerHTML = "Success: " + successstr;
+
+    let childHappiness = document.createElement("span");
+    childHappiness.innerHTML = "Happiness: " + happinessstr;
+
+    let childNews = document.createElement("div");
+
+    para.appendChild(childDate);
+    para.appendChild(document.createElement("br"));
+    para.appendChild(childWeather);
+    para.appendChild(document.createElement("br"));
+    para.appendChild(childSuccess);
+    para.appendChild(document.createElement("br"));
+    para.appendChild(childHappiness);
+    para.appendChild(document.createElement("br"));
+    para.append("News:\n");
+    para.appendChild(document.createElement("br"));
+    para.appendChild(childNews);
+
+    listNews(obj.news, childNews);
+}
+
+function listNews(news, container) {
+  container.innerHTML = "";
+  for (let i = 0; i < news.length; i++) {
+    let n = news[i];
+    let elem = document.createElement("a");
+    let elemBR = document.createElement("br");
+    elem.innerHTML = n.title;
+    elem.href = n.url;
+    container.appendChild(elem);
+    container.appendChild(elemBR);
+  }
+  let showdate = document.getElementById("showdate").value;
+}
+
+
+    
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
