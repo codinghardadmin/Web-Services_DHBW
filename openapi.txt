@@ -1,0 +1,164 @@
+---
+openapi: 3.0.1
+info:
+  title: Generated API
+  version: "1.0"
+paths:
+  /keepyourday/deletedayinfo/{user}/{date}:
+    delete:
+      parameters:
+      - name: date
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: user
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+  /keepyourday/getdayinfo/{user}/{date}:
+    get:
+      parameters:
+      - name: date
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: user
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayInfo'
+  /keepyourday/getdayinfolist/{user}:
+    get:
+      parameters:
+      - name: user
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayListDayInfo'
+  /keepyourday/news:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayListNewsInfo'
+  /keepyourday/postdayinfo:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDayInfo'
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+  /keepyourday/putdayinfo:
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDayInfo'
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+  /keepyourday/version:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+  /keepyourday/weather:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherInfo'
+components:
+  schemas:
+    NewsInfo:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+    ArrayListNewsInfo:
+      $ref: '#/components/schemas/ArrayListNewsInfo'
+    WeatherInfo:
+      type: object
+      properties:
+        maxTemp:
+          format: double
+          type: number
+        minTemp:
+          format: double
+          type: number
+    DayInfo:
+      type: object
+      properties:
+        date:
+          type: string
+        happiness:
+          format: int32
+          type: integer
+        news:
+          $ref: '#/components/schemas/ArrayListNewsInfo'
+        success:
+          type: boolean
+        user:
+          type: string
+        weather:
+          $ref: '#/components/schemas/WeatherInfo'
+    ArrayListDayInfo:
+      $ref: '#/components/schemas/ArrayListDayInfo'
+    PostDayInfo:
+      type: object
+      properties:
+        date:
+          type: string
+        happiness:
+          format: int32
+          type: integer
+        user:
+          type: string
